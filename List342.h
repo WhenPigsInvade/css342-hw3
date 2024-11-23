@@ -28,7 +28,7 @@ template <class T> class List342 {
     List342 operator+(const List342& list) const;
     List342& operator+=(const List342& list);
 
-    friend std::istream& operator<<(std::istream& is, List342& list);
+    friend std::ostream &operator<<(std::ostream &stream, const List342<T>& list);
 
     bool operator==(const List342& list) const;
     bool operator!=(const List342& list) const;
@@ -38,9 +38,17 @@ template <class T> class List342 {
   private:
     bool contains(T target) const;
 
-    Node<class T> *head_;
+    Node<T> *head_;
     int size_;
 
+
+  friend std::ostream &operator<<(std::ostream &stream, const List342<T>& list) {
+    stream << printNext(list.head_);
+    return stream;
+  }
+
 };
+
+
 
 #endif
