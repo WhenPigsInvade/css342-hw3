@@ -26,6 +26,9 @@ int main() {
     std::cout << l3 << std::endl;
     std::cout << l1 << std::endl;
 
+    std::cout << l3.Contains(new int(40)) << std::endl;
+    std::cout << l3.Contains(new int(55)) << std::endl;
+
     // l1.DeleteList();
     // std::cout << l1 << std::endl;
 }
