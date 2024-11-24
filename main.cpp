@@ -1,6 +1,6 @@
 #include <iostream>
 #include "List342.h"
-#include "List342.cpp"
+// #include "List342.cpp"
 
 int main() {
     
@@ -20,7 +20,8 @@ int main() {
     std::cout << l1 << std::endl;
     std::cout << l2 << std::endl;
 
-    List342<int> l3 = l1;
+    List342<int> l3;
+    l3 = l1;
     l3.Insert(new int(15));
     std::cout << l3 << std::endl;
     std::cout << l1 << std::endl;
