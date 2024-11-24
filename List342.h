@@ -69,8 +69,8 @@ List342<T>::List342(const List342& list) : size_(list.size_) {
   Node<T> *index = list.head_;
 
   while(index != nullptr) {
-      Insert(index->data);
-      index = index->next;
+    Insert(index->data);
+    index = index->next;
   }
 }
 
@@ -102,20 +102,35 @@ bool List342<T>::Insert(T* obj) {
 
   // If head_ is nullptr
   if(head_ == nullptr) {
-      head_ = temp;
-      size_++;
-      return true;
+    head_ = temp;
+    size_++;
+    return true;
   }
 
-  Node<T> *index = head_;
-  while(index->next != nullptr && *index->next->data < *temp->data) {
+  // 1 3 4
+  // 0
+
+  // Insert at front
+  if(*head_->data > *temp->data) {
+    temp->next = head_;
+    head_ = temp;
+    size_++;
+    return true;
+  }
+
+  Node<T>* index = head_;
+  while (index->next != nullptr && *index->next->data < *obj) {
       index = index->next;
   }
 
+  // Insert the new node
   temp->next = index->next;
   index->next = temp;
 
+
   size_++;
+
+  // std::cout << *this << std::endl;
 
   return true;
 }
@@ -210,34 +225,45 @@ bool List342<T>::Merge(List342& list1) {
   Node<T> *prev = head_;
   Node<T> *p2 = list1.head_;
 
+
   // 1 4 5
   // 2 3 6 7
 
   // 1 2 4 5
   // 3 6 7
   while(p1 != nullptr && p2 != nullptr) {
-      if(*p1->data < *p2->data) { // case 1: index at list 1 is smaller than index at list 2, do nothing and continue
-          prev = p1;
-          p1 = p1->next;
-      } else if(*p1->data > *p2->data) { // case 2: index at list 1 is greater than index at list do, insert element to prev
-          prev->next = p2;
-          p2 = p2->next;
-          prev->next->next = p1;
-      } else if (*p1->data == *p2->data) {
-          Node<T> *temp = p2;
-          p2 = p2->next;
-          delete temp;
-          temp = NULL;
-      } else { // Should never go into here: idiot proofing
-          std::cout << "Error in Merge() --> went into else case" << std::endl;
-          p1 = p1->next;
-      }
+    std::cout << *p1->data << " " << *p2->data << std::endl;
+    if(*p1->data < *p2->data) { // case 1: index at list 1 is smaller than index at list 2, do nothing and continue
+      std::cout << "stuck" << std::endl;
+      prev = p1;
+      std::cout << *p1->data << " " << *p1->next->data << " " << *p1->next->next->data << std::endl;
+      p1 = p1->next;
+      continue;
+    }
+    if(*p1->data > *p2->data) { // case 2: index at list 1 is greater than index at list do, insert element to prev
+      prev->next = p2;
+      p2 = p2->next;
+      prev->next->next = p1;
+      continue;
+    }
+    if (*p1->data == *p2->data) {
+      Node<T> *temp = p2;
+      p2 = p2->next;
+      delete temp;
+      temp = NULL;
+      continue;
+    } 
+    
+    // Should never go into here: idiot proofing
+    std::cout << "Error in Merge() --> went into else case" << std::endl;
+    p1 = p1->next;
+    
   }
 
   // If we reach the end of p1, we add the remainder of p2 onto the end
   if(p1 == nullptr) {
-      prev->next = p2;
-      list1.head_ = nullptr;
+    prev->next = p2;
+    list1.head_ = nullptr;
   }
   
   return true;

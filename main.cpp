@@ -1,6 +1,7 @@
 #include <iostream>
 #include "list342.h"
 #include "child.h"
+#include "child.cpp"
 using namespace std;
 
 int main() {
@@ -29,40 +30,42 @@ int main() {
     class2.Insert(&c7);
     class2.Insert(&c10);
     cout << "Class2: " << class2 << endl;
-    class1.Merge(class2);
-    class2.Merge(class1);
-    class1.Merge(class2);
-    class1.Merge(class1);
-    cout << "class1 and 2 Merged: " << class1 << endl;
-    class1.Remove(c4, c11);
-    class1.Remove(c5, c11);
-    class1.Remove(c11, c11);
-    if (class1.Remove(c1, c11))
-    {
-    cout << "Removed from class1, student " << c11 << endl;
-    }
     cout << "class1: " << class1 << endl;
-    soccer.Insert(&c6);
-    soccer.Insert(&c4);
-    soccer.Insert(&c9);
-    cout << "soccer: " << soccer << endl;
-    soccer += class1;
-    cout << "soccer += class1 : " << soccer << endl;
-    List342<Child> football = soccer;
-    if (football == soccer)
-    {
-    cout << "football: " << football << endl;
-    }
-    if (football.Peek(c6, c11))
-    {
-    cout << c11 << " is on the football team" << endl;
-    }
-    soccer.DeleteList();
-    List342<int> numbers;
-    numbers.Insert(&a);
-    numbers.Insert(&b);
-    numbers.Insert(&c);
-    cout << "These are the numbers: " << numbers << endl;
-    numbers.DeleteList();
+    class1.Merge(class2);
+    cout << "class1: " << class1 << endl;
+    // class2.Merge(class1);
+    // class1.Merge(class2);
+    // class1.Merge(class1);
+    // cout << "class1 and 2 Merged: " << class1 << endl;
+    // class1.Remove(c4, c11);
+    // class1.Remove(c5, c11);
+    // class1.Remove(c11, c11);
+    // if (class1.Remove(c1, c11))
+    // {
+    // cout << "Removed from class1, student " << c11 << endl;
+    // }
+    // cout << "class1: " << class1 << endl;
+    // soccer.Insert(&c6);
+    // soccer.Insert(&c4);
+    // soccer.Insert(&c9);
+    // cout << "soccer: " << soccer << endl;
+    // soccer += class1;
+    // cout << "soccer += class1 : " << soccer << endl;
+    // List342<Child> football = soccer;
+    // if (football == soccer)
+    // {
+    // cout << "football: " << football << endl;
+    // }
+    // if (football.Peek(c6, c11))
+    // {
+    // cout << c11 << " is on the football team" << endl;
+    // }
+    // soccer.DeleteList();
+    // List342<int> numbers;
+    // numbers.Insert(&a);
+    // numbers.Insert(&b);
+    // numbers.Insert(&c);
+    // cout << "These are the numbers: " << numbers << endl;
+    // numbers.DeleteList();
 
 }
