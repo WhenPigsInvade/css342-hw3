@@ -6,6 +6,18 @@ template <class T>
 List342<T>::List342() : size_(0), head_(nullptr) {}
 
 template <class T>
+List342<T>::List342(const List342& list) : size_(list.size_) {
+    size_ = 0;
+    head_ = nullptr;
+    Node<T> *index = list.head_;
+
+    while(index != nullptr) {
+        Insert(index->data);
+        index = index->next;
+    }
+}
+
+template <class T>
 bool List342<T>::BuildList(std::string file_name) {
 
 
@@ -27,7 +39,7 @@ bool List342<T>::Insert(T* obj) {
     }
 
     Node<T> *index = head_;
-    while(index->next != nullptr && index->next->data < temp->data) {
+    while(index->next != nullptr && *index->next->data < *temp->data) {
         index = index->next;
     }
 
@@ -64,18 +76,14 @@ bool List342<T>::Remove(T target, T& result) {
         index = index->next;
     }
 
-    std::cout << *prev->data << std::endl;
-    std::cout << *index->data << std::endl;
-    std::cout << target << std::endl;
-    
+
     if(*index->data == target) {
 
-        std::cout << "equal" << std::endl;
 
         prev->next = index->next;
         size_--;
         result = *index->data;
-        std::cout << "result: " << result << std::endl;
+
         delete index;  
         return true;
     }
@@ -85,10 +93,27 @@ bool List342<T>::Remove(T target, T& result) {
 
 template <class T>
 bool List342<T>::Peek(T target, T& result) const {
+    Node<T> *index = head_;
 
+    // If head_ is nullptr
+    if(head_ == nullptr) {
+        return false;
+    }
 
+    // Note to self: 
+    // Since the list is sorted, we don't have to worry about skipping our target. As soon as we 
+    // find a node with a data field that is greater than ours, we know the previous has to be equal
+    // or smaller than target.
+    while(index->next != nullptr && *index->next->data <= target) { 
+        index = index->next;
+    }
 
-    return true;
+    if(*index->data == target) {
+        result = *index->data;
+        return true;
+    }
+
+    return false;
 }
 
 template <class T>
@@ -98,13 +123,61 @@ int List342<T>::Size() const {
 
 template <class T>
 void List342<T>::DeleteList() {
+    Node<T> *index = head_;
 
+    // If head_ is nullptr
+    if(head_ == nullptr) {
+        return;
+    }
+
+    while(index->next != nullptr) {
+        Node<T> *prev = index;
+        index = index->next;
+        delete prev;
+    }
+
+    head_ = nullptr;
+    size_ = 0;
+    return;
 }
 
 template <class T>
 bool List342<T>::Merge(List342& list1) {
-    
+    Node<T> *p1 = this->head_;
+    Node<T> *prev = head_;
+    Node<T> *p2 = list1.head_;
 
+    // 1 4 5
+    // 2 3 6 7
+
+    // 1 2 4 5
+    // 3 6 7
+    while(p1 != nullptr && p2 != nullptr) {
+        if(*p1->data < *p2->data) { // case 1: index at list 1 is smaller than index at list 2, do nothing and continue
+            prev = p1;
+            p1 = p1->next;
+        } else if(*p1->data > *p2->data) { // case 2: index at list 1 is greater than index at list do, insert element to prev
+            prev->next = p2;
+            p2 = p2->next;
+            prev->next->next = p1;
+        } else if (*p1->data == *p2->data) {
+            Node<T> *temp = p2;
+            p2 = p2->next;
+            std::cout << *p2->data << std::endl;
+            delete temp;
+            std::cout << *p1->data << std::endl;
+            temp = NULL;
+        } else { // Should never go into here: idiot proofing
+            p1 = p1->next;
+        }
+    }
+
+    // If we reach the end of p1, we add the remainder of p2 onto the end
+    if(p1 == nullptr) {
+        prev->next = p2;
+        list1.head_ = nullptr;
+    }
+    
     return true;
 }
 
@@ -133,22 +206,6 @@ bool List342<T>::operator==(const List342& list) const {
 
 template <class T>
 bool List342<T>::operator!=(const List342& list) const {
-
-
-    return true;
-}
-
-template <class T>
-List342<T>& List342<T>::operator=(const List342& list) {
-
-
-    return List342();
-}
-
-template <class T>
-bool List342<T>::contains(T target) const {
-
-
 
 
     return true;

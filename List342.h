@@ -12,6 +12,7 @@ struct Node {
 template <class T> class List342 {
   public:
     List342();
+    List342(const List342& list);
 
     bool BuildList(std::string file_name);
 
@@ -33,11 +34,9 @@ template <class T> class List342 {
     bool operator==(const List342& list) const;
     bool operator!=(const List342& list) const;
 
-    List342& operator=(const List342& list);
+
 
   private:
-    bool contains(T target) const;
-
     Node<T> *head_;
     int size_;
 
