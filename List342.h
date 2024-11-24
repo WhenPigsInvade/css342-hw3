@@ -1,3 +1,6 @@
+//Harry Fung
+//CSS342
+//HW3
 #ifndef LIST342_H
 #define LIST342_H
 #include <iostream>
@@ -221,50 +224,49 @@ void List342<T>::DeleteList() {
 
 template <class T>
 bool List342<T>::Merge(List342& list1) {
-  Node<T> *p1 = this->head_;
-  Node<T> *prev = head_;
-  Node<T> *p2 = list1.head_;
 
+  if(*this == list1) return false;
+  if(list1.head_ == nullptr) return false;
 
-  // 1 4 5
-  // 2 3 6 7
-
-  // 1 2 4 5
-  // 3 6 7
-  while(p1 != nullptr && p2 != nullptr) {
-    std::cout << *p1->data << " " << *p2->data << std::endl;
-    if(*p1->data < *p2->data) { // case 1: index at list 1 is smaller than index at list 2, do nothing and continue
-      std::cout << "stuck" << std::endl;
-      prev = p1;
-      std::cout << *p1->data << " " << *p1->next->data << " " << *p1->next->next->data << std::endl;
-      p1 = p1->next;
-      continue;
-    }
-    if(*p1->data > *p2->data) { // case 2: index at list 1 is greater than index at list do, insert element to prev
-      prev->next = p2;
-      p2 = p2->next;
-      prev->next->next = p1;
-      continue;
-    }
-    if (*p1->data == *p2->data) {
-      Node<T> *temp = p2;
-      p2 = p2->next;
-      delete temp;
-      temp = NULL;
-      continue;
-    } 
-    
-    // Should never go into here: idiot proofing
-    std::cout << "Error in Merge() --> went into else case" << std::endl;
-    p1 = p1->next;
-    
-  }
-
-  // If we reach the end of p1, we add the remainder of p2 onto the end
-  if(p1 == nullptr) {
-    prev->next = p2;
+  if(head_ == nullptr) {
+    head_ = list1.head_;
     list1.head_ = nullptr;
+    return true;
   }
+
+  Node<T> *index = list1.head_;
+
+  while(index != nullptr) {
+    if(this->Contains(index->data)) {
+      Node<T> *temp = index;
+      index = index->next;
+      delete temp;
+      continue;
+    }
+
+    if(*head_->data > *index->data) {
+      Node<T> *node = index;
+      index = index->next;
+
+      node->next = head_;
+      head_ = node;
+
+      continue;
+    }
+
+    Node<T> *curr = head_;
+    while(curr->next != nullptr && *curr->next->data < *index->data) {
+      curr = curr->next;
+    }
+
+    Node<T> *temp = index->next;
+    index->next = curr->next;
+    curr->next = index;
+    index = temp;
+
+  }
+
+  list1.head_ = nullptr;
   
   return true;
 }
@@ -293,12 +295,14 @@ List342<T>& List342<T>::operator+=(const List342& list) {
 template <class T>
 bool List342<T>::operator==(const List342& list) const {
   Node<T> *p1 = head_;
-  Node<T> *p2 = this->head_;
+  Node<T> *p2 = list.head_;
 
   if(size_ != list.size_) return false;
 
   while(p1 != nullptr && p2 != nullptr) {
     if(*p1->data != *p2->data) return false;
+    p1 = p1->next;
+    p2 = p2->next;
   }
 
   return true;
