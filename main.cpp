@@ -23,11 +23,12 @@ int main() {
     List342<int> l3;
     l3 = l1;
     l3.Insert(new int(15));
+    l3.Insert(new int(15));
     std::cout << l3 << std::endl;
-    std::cout << l1 << std::endl;
+    // std::cout << l1 << std::endl;
 
-    std::cout << l3.Contains(new int(40)) << std::endl;
-    std::cout << l3.Contains(new int(55)) << std::endl;
+    std::cout << l3+l2 << std::endl;
+
 
     // l1.DeleteList();
     // std::cout << l1 << std::endl;

@@ -37,7 +37,13 @@ template <class T> class List342 {
     List342<T>& operator=(List342& list);
 
   friend std::ostream &operator<<(std::ostream &stream, const List342<T>& list) {
-    stream << printNext(list.head_);
+    Node<T> *index = list.head_;
+    while(index != nullptr) {
+      stream << index->data << " ";
+      index = index->next;
+    }
+
+    // stream << printNext(list.head_);
     return stream;
   }
 
@@ -77,10 +83,12 @@ bool List342<T>::BuildList(std::string file_name) {
 
 template <class T>
 bool List342<T>::Insert(T* obj) {
-  
+  if(this->Contains(obj)) {
+    return false;
+  }
 
   Node<T> *temp = new Node<T>();
-  temp->data = obj;
+  temp->data = new T(*obj);
   temp->next = nullptr;
 
   // If head_ is nullptr
@@ -93,12 +101,6 @@ bool List342<T>::Insert(T* obj) {
   Node<T> *index = head_;
   while(index->next != nullptr && *index->next->data < *temp->data) {
       index = index->next;
-  }
-
-  // Do not add if data already exist in list
-  if(*index->data == *temp->data) {
-      delete temp;
-      return false;
   }
 
   temp->next = index->next;
@@ -234,11 +236,18 @@ bool List342<T>::Merge(List342& list1) {
 
 template <class T>
 List342<T> List342<T>::operator+(const List342& list) const {
-  // List342 res = *this;
+  List342 res = *this;
+  Node<T> *index = list.head_;
+
+  while(index != nullptr) {
+    if(!res.Contains(index->data)) {
+      res.Insert(index->data);
+    }
+
+    index = index->next;
+  }
   
-
-
-  return List342();
+  return res;
 }
 
 template <class T>
