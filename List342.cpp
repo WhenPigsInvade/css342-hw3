@@ -163,11 +163,10 @@ bool List342<T>::Merge(List342& list1) {
         } else if (*p1->data == *p2->data) {
             Node<T> *temp = p2;
             p2 = p2->next;
-            std::cout << *p2->data << std::endl;
             delete temp;
-            std::cout << *p1->data << std::endl;
             temp = NULL;
         } else { // Should never go into here: idiot proofing
+            std::cout << "Error in Merge() --> went into else case" << std::endl;
             p1 = p1->next;
         }
     }

@@ -21,7 +21,9 @@ int main() {
     std::cout << l2 << std::endl;
 
     List342<int> l3 = l1;
-    std::cout << &l3 << std::endl;
+    l3.Insert(new int(15));
+    std::cout << l3 << std::endl;
+    std::cout << l1 << std::endl;
 
     // l1.DeleteList();
     // std::cout << l1 << std::endl;
