@@ -2,6 +2,7 @@
 #define LIST342_H
 #include <iostream>
 #include <string>
+#include <fstream>
 
 template <class T>
 struct Node {
@@ -39,7 +40,7 @@ template <class T> class List342 {
   friend std::ostream &operator<<(std::ostream &stream, const List342<T>& list) {
     Node<T> *index = list.head_;
     while(index != nullptr) {
-      stream << index->data << " ";
+      stream << *index->data;
       index = index->next;
     }
 
@@ -75,8 +76,16 @@ List342<T>::List342(const List342& list) : size_(list.size_) {
 
 template <class T>
 bool List342<T>::BuildList(std::string file_name) {
+  std::ifstream file;
+  file.open(file_name);
 
+  std::string line;
 
+  while (std::getline(file, line)) {
+    Insert(new T(line));
+  }
+
+  file.close();
 
   return true;
 }
@@ -237,39 +246,41 @@ bool List342<T>::Merge(List342& list1) {
 template <class T>
 List342<T> List342<T>::operator+(const List342& list) const {
   List342 res = *this;
-  Node<T> *index = list.head_;
-
-  while(index != nullptr) {
-    if(!res.Contains(index->data)) {
-      res.Insert(index->data);
-    }
-
-    index = index->next;
-  }
-  
+  res += list;
   return res;
 }
 
 template <class T>
 List342<T>& List342<T>::operator+=(const List342& list) {
+  Node<T> *index = list.head_;
 
+  while(index != nullptr) {
+    if(!this->Contains(index->data)) {
+      this->Insert(index->data);
+    }
 
-
-  return List342();
+    index = index->next;
+  }
+  return *this;
 }
 
 template <class T>
 bool List342<T>::operator==(const List342& list) const {
-  
+  Node<T> *p1 = head_;
+  Node<T> *p2 = this->head_;
+
+  if(size_ != list.size_) return false;
+
+  while(p1 != nullptr && p2 != nullptr) {
+    if(*p1->data != *p2->data) return false;
+  }
 
   return true;
 }
 
 template <class T>
 bool List342<T>::operator!=(const List342& list) const {
-
-
-    return true;
+  return !(*this==list);
 }
 
 template <class T>
@@ -283,12 +294,6 @@ List342<T>& List342<T>::operator=(List342& list) {
   }
 
   return *this;
-}
-
-template <class T>
-std::string printNext(Node<T> *node) {
-    if(node == nullptr) return "";
-    return std::to_string(*node->data) + printNext(node->next);
 }
 
 template <class T>

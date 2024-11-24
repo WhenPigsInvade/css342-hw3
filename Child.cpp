@@ -1,51 +1,90 @@
-#include "Child.h"
-#include <iostream>
-
-using std::cout;
-using std::ostream;
-using std::istream;
-
-Child::Child() : _age(-1), _firstName(""), _lastName("") {  }
-
-Child::Child(const Child &childToCopy) {
-    _firstName = childToCopy._firstName;
-    _lastName = childToCopy._lastName;
-    _age = childToCopy._age;
+#include "child.h"
+//Constructors
+Child::Child()
+{
+age_ = 0;
 }
-
-Child::Child(string firstName, string lastName, int age) : _age(age), _firstName(firstName), _lastName(lastName) {  }
-
-bool Child::operator<(const Child &toCompare) const {
-    if (_lastName != toCompare._lastName) {
-        return _lastName < toCompare._lastName;
-    } else if (_firstName != toCompare._firstName) {
-        return _firstName < toCompare._firstName;
-    } else if (_age != toCompare._age) {
-        return _age < toCompare._age;
-    }
-
-    return false;    
-    
+Child::Child(string first_name, string last_name, int age)
+{
+first_name_ = first_name;
+last_name_ = last_name;
+age_ = age;
 }
-
-bool Child::operator==(const Child &toCompare) const {
-    return ((_lastName == toCompare._lastName) && (_firstName == toCompare._firstName) && (_age == toCompare._age));
+Child::Child(string first_name, string last_name)
+{
+first_name_ = first_name;
+last_name_ = last_name;
+age_ = 0;
 }
-
-bool Child::operator!=(const Child &toCompare) const {
-    return ((_lastName != toCompare._lastName) || (_firstName != toCompare._firstName) || (_age != toCompare._age));
+string Child::name() const
+{
+return (first_name_ + last_name_);
 }
-
-ostream &operator<<(ostream &stream, const Child &child) {
-    stream << child._firstName << child._lastName << child._age;
-    return stream;
+int Child::age() const
+{
+return age_;
 }
-
-istream &operator>>(istream &stream, Child &child) {
-    string firstName, lastName, age;
-    stream >> firstName >> lastName >> age;
-    child._firstName = firstName;
-    child._lastName = lastName;
-    child._age = std::stoi(age);
-    return stream;
+void Child::set_first_name(const string &name)
+{
+first_name_ = name;
+}
+void Child::set_last_name(const string &name)
+{
+last_name_ = name;
+}
+// Operator Overloads
+bool Child::operator==(const Child &child) const
+{
+return ((first_name_ == child.first_name_) &&
+(last_name_ == child.last_name_) &&
+(age_ == child.age_));
+}
+bool Child::operator!=(const Child &child) const
+{
+return !(*this == child);
+}
+bool Child::operator<(const Child &child) const
+{
+//Compare last names, then first names, then age.
+if (last_name_ < child.last_name_)
+{
+return true;
+}
+else if (last_name_ > child.last_name_)
+{
+return false;
+}
+if (first_name_ < child.first_name_)
+{
+return true;
+}
+else if (first_name_ > child.first_name_)
+{
+return false;
+}
+return (age_ < child.age_);
+}
+bool Child::operator<=(const Child &child) const
+{
+return ((*this == child) || (*this < child));
+}
+bool Child::operator>(const Child& child) const
+{
+return !(*this <= child);
+}
+bool Child::operator>=(const Child &child) const
+{
+return ((*this == child) || (*this > child));
+}
+ostream& operator<<(ostream &stream, const Child &child)
+{
+stream << child.first_name_ << child.last_name_ << child.age_;
+return stream;
+}
+istream& operator>>(istream &stream, Child &child)
+{
+stream >> child.first_name_;
+stream >> child.last_name_;
+stream >> child.age_;
+return stream;
 }
